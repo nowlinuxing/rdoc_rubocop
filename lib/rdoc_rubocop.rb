@@ -1,6 +1,6 @@
 require "rdoc_rubocop/version"
 
-module RdocRubocop
+module RDocRuboCop
   class Error < StandardError; end
   # Your code goes here...
 end

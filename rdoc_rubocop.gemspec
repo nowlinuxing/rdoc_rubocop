@@ -5,7 +5,7 @@ require "rdoc_rubocop/version"
 
 Gem::Specification.new do |spec|
   spec.name          = "rdoc_rubocop"
-  spec.version       = RdocRubocop::VERSION
+  spec.version       = RDocRuboCop::VERSION
   spec.authors       = ["Loose Coupling"]
   spec.email         = ["loosecpl@gmail.com"]
 
