@@ -14,3 +14,11 @@ RSpec.configure do |config|
     c.syntax = :expect
   end
 end
+
+class String
+  # Simplified version of ActiveSupport
+  # activesupport/lib/active_support/core_ext/string/strip.rb
+  def strip_heredoc
+    gsub(/^#{scan(/^ *(?=\S)/).min}/, "")
+  end
+end
