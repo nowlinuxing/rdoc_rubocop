@@ -1,5 +1,7 @@
 require "bundler/setup"
 require "rdoc_rubocop"
+require "pry-byebug"
+require "pry-doc"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
