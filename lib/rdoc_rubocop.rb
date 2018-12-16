@@ -1,3 +1,4 @@
+require "rubocop"
 require "rdoc_rubocop/version"
 require "rdoc_rubocop/comment_extractor"
 require "rdoc_rubocop/source_file"
