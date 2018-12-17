@@ -1,8 +1,10 @@
+require "rdoc_rubocop/comment_token_organizable"
 require "rdoc_rubocop/comment/source_code"
 
 module RDocRuboCop
   class Comment
-    attr_reader :comment_tokens
+    include CommentTokenOrganizable
+
     attr_reader :source_file
 
     def initialize(comment_tokens, source_file = nil)
@@ -29,10 +31,6 @@ module RDocRuboCop
     end
 
     private
-
-    def comment_indent
-      @comment_indent ||= @comment_tokens.reject(&:blank?).map(&:comment_indent).min
-    end
 
     def trim(code_chunk)
       i = code_chunk.size - 1

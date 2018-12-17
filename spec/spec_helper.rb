@@ -22,3 +22,23 @@ class String
     gsub(/^#{scan(/^ *(?=\S)/).min}/, "")
   end
 end
+
+# When stub FIle.open
+#
+#   before do
+#     expect(File).to receive(:open).with("output.txt", "w")
+#   end
+#
+# and use binding.pry, raise a unexpected error:
+#
+#   it do
+#     binding.pry
+#     expect { subject }.not_to raise_error
+#   end
+#
+#   #=> # #<File (class)> received :open with unexpected arguments
+#           expected: ("output.txt", "w")
+#                got: ("/home/user/.pry_history", "a", 123)
+#
+# To make easy to stub and debug, separate File is used in RuboCop from ::File.
+class RuboCop::Formatter::File < File; end
