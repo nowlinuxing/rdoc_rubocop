@@ -19,6 +19,10 @@ module RDocRuboCop
       def lineno
         @lineno ||= comment_tokens.map(&:lineno).minmax
       end
+
+      def indent_and_commentchar
+        Token::CommentToken.indent_and_commentchar(comment_tokens[0].column, comment_indent)
+      end
     end
   end
 end
