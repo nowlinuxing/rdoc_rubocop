@@ -62,3 +62,8 @@ end
 
 RuboCop::Runner.prepend RDocRuboCop::RuboCopModifier::RunnerModifier
 RuboCop::Cop::Team.prepend RDocRuboCop::RuboCopModifier::TeamModifier
+
+RuboCop::ConfigLoader.send(:remove_const, :DOTFILE)
+RuboCop::ConfigLoader.const_set(:DOTFILE, ".rdoc_rubocop.yml".freeze)
+RuboCop::ConfigLoader.send(:remove_const, :AUTO_GENERATED_FILE)
+RuboCop::ConfigLoader.const_set(:AUTO_GENERATED_FILE, ".rdoc_rubocop_todo.yml".freeze)

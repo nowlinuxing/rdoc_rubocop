@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+
+$LOAD_PATH.unshift("#{__dir__}/../lib")
+
+require "rdoc_rubocop"
+
+options, paths = RDocRuboCop::Options.new.parse(ARGV)
+paths = Dir.glob("**/*.rb") if paths.empty?  if paths.empty?
+
+runner = RDocRuboCop::RuboCopRunner.new(paths, options: options)
+runner.run

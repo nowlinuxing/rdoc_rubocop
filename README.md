@@ -1,8 +1,39 @@
 # RDocRuboCop
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/rdoc_rubocop`. To experiment with that code, run `bin/console` for an interactive prompt.
+**RDocRuboCop** is a Ruby static code analyzer and formatter for codes in RDoc.
 
-TODO: Delete this and the text above, and describe your gem
+### before
+
+```ruby
+class Foo
+  # concatenate each elements with ","
+  #
+  #   a = [ 1 , 2 , 3 ]
+  #   foo=Foo.new
+  #   foo.bar( a )
+  #
+  def bar(array)
+    array.join(",")
+  end
+end
+```
+
+### after
+
+```ruby
+class Foo
+  # concatenate each elements with ","
+  #
+  #   a = [1, 2, 3]
+  #   foo = Foo.new
+  #   foo.bar(a)
+  #
+  def bar(array)
+    array.join(",")
+  end
+end
+
+```
 
 ## Installation
 
@@ -22,7 +53,11 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+    # Generate .rdoc_rubocop.yml and .rdoc_rubocop_todo.yml
+    $ rdoc-rubocop --auto-gen-config
+
+    # Correct the code
+    $ rdoc-rubocop -a
 
 ## Development
 
@@ -32,7 +67,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/rdoc_rubocop.
+Bug reports and pull requests are welcome on GitHub at https://github.com/nowlinuxing/rdoc_rubocop.
 
 ## License
 
