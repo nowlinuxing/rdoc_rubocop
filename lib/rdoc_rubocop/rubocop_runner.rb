@@ -21,19 +21,27 @@ module RDocRuboCop
 
     def format
       targets = source_files
-
       file_paths = targets.flat_map(&:source_code_file_paths)
-      exit_code = run_cli(file_paths)
 
-      targets.each(&:correct!)
+      if file_paths.empty?
+        report_zero
+      else
+        exit_code = run_cli(file_paths)
+        targets.each(&:correct!)
 
-      exit_code
+        exit_code
+      end
     end
 
     def style_check
       targets = source_files
       file_paths = targets.flat_map(&:source_code_file_paths)
-      run_cli(file_paths)
+
+      if file_paths.empty?
+        report_zero
+      else
+        run_cli(file_paths)
+      end
     end
 
     def run_cli(source_code_file_paths)
@@ -42,6 +50,15 @@ module RDocRuboCop
 
     def source_files
       @paths.map(&SourceFile.method(:build))
+    end
+
+    # Report with a message: "Inspecting 0 files"
+    def report_zero
+      non_existing_filepath = Dir.glob("#{__dir__}/*").sort.last.succ
+
+      options, _ = RuboCop::Options.new.parse(@options)
+      config_store = RuboCop::ConfigStore.new
+      runner = RuboCop::Runner.new(options, config_store).run([non_existing_filepath])
     end
   end
 end
