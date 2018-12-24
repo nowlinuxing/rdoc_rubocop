@@ -56,6 +56,12 @@ Or install it yourself as:
     # Generate .rdoc_rubocop.yml and .rdoc_rubocop_todo.yml
     $ rdoc-rubocop --auto-gen-config
 
+    # If .rubocop.yml already exists, and apply same cops to RDoc, edit .rdoc_rubocop.yml:
+    #
+    #   inherit_from: .rubocop.yml
+    #   Style/FrozenStringLiteralComment:
+    #     Enabled: false
+
     # Correct the code
     $ rdoc-rubocop -a
 
