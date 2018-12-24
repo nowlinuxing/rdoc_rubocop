@@ -5,7 +5,19 @@ $LOAD_PATH.unshift("#{__dir__}/../lib")
 require "rdoc_rubocop"
 
 options, paths = RDocRuboCop::Options.new.parse(ARGV)
-paths = Dir.glob("**/*.rb") if paths.empty?  if paths.empty?
 
-runner = RDocRuboCop::RuboCopRunner.new(paths, options: options)
+paths = ["."] if paths.empty?
+paths =
+  paths.
+  uniq.
+  flat_map do |path|
+    path = Pathname.new(path)
+    if path.directory?
+      path.glob("**/*.rb")
+    else
+      path
+    end
+  end
+
+runner = RDocRuboCop::RuboCopRunner.new(paths.map(&:to_s), options: options)
 runner.run
