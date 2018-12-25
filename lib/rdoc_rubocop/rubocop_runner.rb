@@ -44,8 +44,13 @@ module RDocRuboCop
       end
     end
 
+    require "rdoc_rubocop/rubocop_modifier"
+    include RDocRuboCop::RuboCopModifier::ConfigLoaderModifier
+
     def run_cli(source_code_file_paths)
-      @cli.run(@options + source_code_file_paths)
+      change_dotfilenames_temporary do
+        @cli.run(@options + source_code_file_paths)
+      end
     end
 
     def source_files

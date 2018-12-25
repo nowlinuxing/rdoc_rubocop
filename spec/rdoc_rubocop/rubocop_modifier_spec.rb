@@ -47,4 +47,32 @@ RSpec.describe RDocRuboCop::RuboCopModifier do
       )
     end
   end
+
+  describe RDocRuboCop::RuboCopModifier::ConfigLoaderModifier do
+    describe "#change_dotfilenames_temporary" do
+      subject do
+        klass =
+          Class.new do
+            include RDocRuboCop::RuboCopModifier::ConfigLoaderModifier
+          end
+
+        klass.new.change_dotfilenames_temporary do
+          [
+            RuboCop::ConfigLoader::DOTFILE,
+            RuboCop::ConfigLoader::AUTO_GENERATED_FILE,
+          ]
+        end
+      end
+
+      it "should change filenames" do
+        is_expected.to eq([".rdoc_rubocop.yml", ".rdoc_rubocop_todo.yml"])
+      end
+
+      it "should restore original filenames" do
+        subject
+        expect(RuboCop::ConfigLoader::DOTFILE).to eq(".rubocop.yml")
+        expect(RuboCop::ConfigLoader::AUTO_GENERATED_FILE).to eq(".rubocop_todo.yml")
+      end
+    end
+  end
 end

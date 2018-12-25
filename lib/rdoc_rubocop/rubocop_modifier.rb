@@ -57,13 +57,33 @@ module RDocRuboCop
         end
       end
     end
+
+    module ConfigLoaderModifier
+      DOTFILE = ".rdoc_rubocop.yml".freeze
+      AUTO_GENERATED_FILE = ".rdoc_rubocop_todo.yml".freeze
+
+      def change_dotfilenames_temporary
+        dotfile_backup = RuboCop::ConfigLoader::DOTFILE
+        auto_generated_file_backup = RuboCop::ConfigLoader::AUTO_GENERATED_FILE
+
+        redefine_const(:DOTFILE, DOTFILE)
+        redefine_const(:AUTO_GENERATED_FILE, AUTO_GENERATED_FILE)
+
+        yield
+      ensure
+        redefine_const(:DOTFILE, dotfile_backup)
+        redefine_const(:AUTO_GENERATED_FILE, auto_generated_file_backup)
+      end
+
+      private
+
+      def redefine_const(const_name, value)
+        RuboCop::ConfigLoader.send(:remove_const, const_name)
+        RuboCop::ConfigLoader.const_set(const_name, value)
+      end
+    end
   end
 end
 
 RuboCop::Runner.prepend RDocRuboCop::RuboCopModifier::RunnerModifier
 RuboCop::Cop::Team.prepend RDocRuboCop::RuboCopModifier::TeamModifier
-
-RuboCop::ConfigLoader.send(:remove_const, :DOTFILE)
-RuboCop::ConfigLoader.const_set(:DOTFILE, ".rdoc_rubocop.yml".freeze)
-RuboCop::ConfigLoader.send(:remove_const, :AUTO_GENERATED_FILE)
-RuboCop::ConfigLoader.const_set(:AUTO_GENERATED_FILE, ".rdoc_rubocop_todo.yml".freeze)
