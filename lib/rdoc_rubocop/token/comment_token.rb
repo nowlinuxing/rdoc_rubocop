@@ -10,7 +10,7 @@ module RDocRuboCop
           SPACE_CHAR * indent_after_comment
       end
 
-      def on_comment?
+      def comment?
         true
       end
 
