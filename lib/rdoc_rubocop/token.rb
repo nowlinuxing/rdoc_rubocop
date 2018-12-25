@@ -26,7 +26,7 @@ module RDocRuboCop
       @locate[1]
     end
 
-    def on_comment?
+    def comment?
       false
     end
   end

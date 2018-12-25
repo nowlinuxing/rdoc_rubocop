@@ -21,7 +21,7 @@ module RDocRuboCop
     private
 
     def comment_tokens
-      tokens.select(&:on_comment?)
+      tokens.select(&:comment?)
     end
 
     def tokens
