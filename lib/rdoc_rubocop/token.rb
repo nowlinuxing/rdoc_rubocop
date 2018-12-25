@@ -26,8 +26,12 @@ module RDocRuboCop
       @locate[1]
     end
 
-    def comment?
-      false
+    %i(on_sp on_comment).each do |type|
+      class_eval <<-RUBY, __FILE__, __LINE__ + 1
+        def #{type.to_s.sub(/^on_/, "")}? # def sp?
+          type == :#{type}                #   type == :on_sp
+        end                               # end
+      RUBY
     end
   end
 end

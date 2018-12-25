@@ -49,5 +49,37 @@ RSpec.describe RDocRuboCop::CommentExtractor do
         expect(subject[1].comment_tokens[2].token).to eq("# comment-in-Foo-3\n")
       end
     end
+
+    context "when two comments are adjacent" do
+      let(:source) do
+        <<-RUBY.strip_heredoc
+          class Foo
+            #--
+            # comment
+            def foo # :nodoc:
+              "foo"
+            end
+            module_function :foo
+          end
+        RUBY
+      end
+
+      it "should returns two instances of Comment" do
+        expect(subject.size).to eq(2)
+
+        expect(subject[0].comment_tokens.size).to eq(2)
+        expect(subject[0].comment_tokens[0]).to be_an_instance_of(RDocRuboCop::Token::CommentToken)
+        expect(subject[0].comment_tokens[0].lineno).to eq(2)
+        expect(subject[0].comment_tokens[0].token).to eq("#--\n")
+        expect(subject[0].comment_tokens[1]).to be_an_instance_of(RDocRuboCop::Token::CommentToken)
+        expect(subject[0].comment_tokens[1].lineno).to eq(3)
+        expect(subject[0].comment_tokens[1].token).to eq("# comment\n")
+
+        expect(subject[1].comment_tokens.size).to eq(1)
+        expect(subject[1].comment_tokens[0]).to be_an_instance_of(RDocRuboCop::Token::CommentToken)
+        expect(subject[1].comment_tokens[0].lineno).to eq(4)
+        expect(subject[1].comment_tokens[0].token).to eq("# :nodoc:\n")
+      end
+    end
   end
 end

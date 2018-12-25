@@ -12,22 +12,42 @@ module RDocRuboCop
     end
 
     def extract
-      @comments =
-        comment_tokens.
-          slice_when { |token_before, token_after| token_after.lineno - token_before.lineno > 1 }.
-          map { |comment_tokens| Comment.new(comment_tokens, @source_file) }
+      @comments = extract_comments
     end
 
     private
 
-    def comment_tokens
-      tokens.select(&:comment?)
+    def extract_comments
+      chunk = []
+      comments = []
+
+      tokens.each do |tokens_in_line|
+        token = tokens_in_line.pop
+
+        if token.comment?
+          if tokens_in_line.all?(&:sp?)
+            chunk << token
+          else
+            comments << Comment.new(chunk, @source_file) if chunk.any?
+            chunk = [token]
+          end
+        else
+          if chunk.any?
+            comments << Comment.new(chunk, @source_file)
+            chunk = []
+          end
+        end
+      end
+      comments << Comment.new(chunk, @source_file) if chunk.any?
+
+      comments
     end
 
     def tokens
       Ripper.
         lex(@source_file.source).
-        map { |token| Token.build(*token) }
+        map { |token| Token.build(*token) }.
+        slice_when { |token_before, token_after| token_before.lineno != token_after.lineno }
     end
   end
 end
