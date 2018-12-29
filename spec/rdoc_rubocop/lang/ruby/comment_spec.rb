@@ -1,9 +1,9 @@
 require "spec_helper"
 
-RSpec.describe RDocRuboCop::Comment do
+RSpec.describe RDocRuboCop::Lang::Ruby::Comment do
   describe "#source_codes" do
     def build_comment(locate, type, token, state)
-      RDocRuboCop::Token::CommentToken.new(locate, type, token, state)
+      RDocRuboCop::Lang::Ruby::Token::CommentToken.new(locate, type, token, state)
     end
 
     let(:comment_tokens) do
@@ -41,7 +41,7 @@ RSpec.describe RDocRuboCop::Comment do
 
       it "should return an array contains one instance of SourceCode" do
         expect(subject.size).to eq(1)
-        expect(subject[0]).to be_an_instance_of(RDocRuboCop::Comment::SourceCode)
+        expect(subject[0]).to be_an_instance_of(RDocRuboCop::Lang::Ruby::SourceCode)
         expect(subject[0].comment_tokens.size).to eq(2)
       end
     end
