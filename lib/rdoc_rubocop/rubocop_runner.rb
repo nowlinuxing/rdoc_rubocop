@@ -1,5 +1,4 @@
 require "rdoc_rubocop/source_file"
-require "rdoc_rubocop/comment_extractor"
 
 module RDocRuboCop
   class RuboCopRunner

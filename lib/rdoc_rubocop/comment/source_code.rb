@@ -1,4 +1,4 @@
-require "rdoc_rubocop/token/comment_token"
+require "rdoc_rubocop/token"
 
 module RDocRuboCop
   class Comment
