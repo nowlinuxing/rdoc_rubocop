@@ -88,4 +88,5 @@ module RDocRuboCop
   end
 end
 
+require "rdoc_rubocop/lang/c/source_file"
 require "rdoc_rubocop/lang/ruby/source_file"
