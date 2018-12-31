@@ -22,11 +22,9 @@ module RDocRuboCop
 
     def source_code_file_paths
       @source_code_file_paths ||=
-        comments.flat_map do |comment|
-          comment.source_codes.map do |source_code|
-            FilePath.new(@filename, source_code)
-          end
-        end
+        comments.
+          flat_map(&:source_codes).
+          map { |source_code| FilePath.new(@filename, source_code) }
     end
 
     def comments
