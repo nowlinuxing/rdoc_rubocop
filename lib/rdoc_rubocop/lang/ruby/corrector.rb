@@ -18,32 +18,21 @@ module RDocRuboCop
             apply(source_lines, file_path)
           end
 
-          @source = source_lines.flatten.join
+          @source = source_lines.join
         end
 
         private
 
         def apply(source_lines, file_path)
-          lineno = file_path.source_code.lineno
-
-          delete_lines(source_lines, lineno[0] - 1, lineno[1] - 1)
-          insert(source_lines, lineno[0] - 1, file_path)
-        end
-
-        def delete_lines(source_lines, lineno_from, lineno_to)
-          (lineno_to).downto(lineno_from).each do |i|
-            source_lines.delete_at(i)
-          end
-        end
-
-        def insert(source_lines, index, file_path)
           indent_and_commentchar = file_path.source_code.indent_and_commentchar
           source_with_indent =
             file_path.source.
             gsub(/^/, indent_and_commentchar).
             gsub(/#{Token::CommentToken::COMMENT_CHAR}\s*$/, "#")
 
-          source_lines.insert(index, source_with_indent)
+          index = file_path.source_code.lineno[0] - 1
+          number_of_lines = file_path.source_code.number_of_lines
+          source_lines[index, number_of_lines] = source_with_indent
         end
       end
     end
