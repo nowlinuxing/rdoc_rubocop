@@ -1,5 +1,3 @@
-require "rdoc_rubocop/file_path"
-
 module RDocRuboCop
   module RuboCopModifier
     module HijackSTDIN

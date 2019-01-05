@@ -1,5 +1,3 @@
-require "rdoc_rubocop/comment/source_code"
-
 module RDocRuboCop
   class FilePath < String
     attr_reader :source_code
