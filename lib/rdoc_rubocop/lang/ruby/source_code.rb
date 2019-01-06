@@ -1,4 +1,5 @@
 require "rdoc_rubocop/lang/ruby/comment_token_organizable"
+require "rdoc_rubocop/file_path"
 require "rdoc_rubocop/lang/ruby/token"
 
 module RDocRuboCop
@@ -8,10 +9,15 @@ module RDocRuboCop
         include CommentTokenOrganizable
 
         attr_reader :comment
+        attr_reader :file_path
 
         def initialize(comment_tokens, comment = nil)
           @comment_tokens = comment_tokens
           @comment = comment
+        end
+
+        def build_file_path(filename)
+          @file_path = FilePath.new(filename, self)
         end
 
         def text

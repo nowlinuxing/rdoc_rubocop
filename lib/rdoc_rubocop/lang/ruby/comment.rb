@@ -15,6 +15,12 @@ module RDocRuboCop
         end
 
         def source_codes
+          @source_codes ||= extract_source_codes
+        end
+
+        private
+
+        def extract_source_codes
           code_chunk = []
           codes = []
           @comment_tokens.each do |comment_token|
@@ -31,8 +37,6 @@ module RDocRuboCop
 
           codes
         end
-
-        private
 
         def trim(code_chunk)
           i = code_chunk.size - 1
