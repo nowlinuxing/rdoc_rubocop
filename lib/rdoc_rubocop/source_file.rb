@@ -51,10 +51,10 @@ module RDocRuboCop
     end
 
     def correct
-      corrector = corrector_class.new(@source, @source_code_file_paths)
+      corrector = corrector_class.new(self)
       corrector.correct
 
-      @source = corrector.source
+      @source = corrector.corrected_source
     end
 
     # def corrector_class

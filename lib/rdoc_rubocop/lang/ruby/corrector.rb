@@ -4,21 +4,21 @@ module RDocRuboCop
   module Lang
     module Ruby
       class Corrector
-        attr_reader :source
+        attr_reader :corrected_source
 
-        def initialize(source, source_code_file_paths)
-          @source = source
-          @source_code_file_paths = source_code_file_paths
+        def initialize(source_file)
+          @source_file = source_file
+          @corrected_source = nil
         end
 
         def correct
-          source_lines = source.lines
+          source_lines = @source_file.source.lines
 
-          @source_code_file_paths.reverse_each do |file_path|
+          @source_file.source_code_file_paths.reverse_each do |file_path|
             apply(source_lines, file_path)
           end
 
-          @source = source_lines.join
+          @corrected_source = source_lines.join
         end
 
         private
