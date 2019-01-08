@@ -1,11 +1,14 @@
 require "rdoc_rubocop/indent_util"
 require "rdoc_rubocop/rdoc/line"
+require "rdoc_rubocop/file_path"
 
 using RDocRuboCop::IndentUtil
 
 module RDocRuboCop
   class RDoc
     class RubySnippet
+      attr_reader :file_path
+
       def initialize
         @lines = []
       end
@@ -27,11 +30,32 @@ module RDocRuboCop
       end
 
       def text
-        @lines.map(&:str).join.strip_indent
+        text_with_indent.strip_indent
       end
 
       def lineno
-        @lines.map(&:lineno).minmax
+        @lineno ||= @lines.map(&:lineno).minmax
+      end
+
+      def number_of_lines
+        lineno[1] - lineno[0] + 1
+      end
+
+      def build_file_path(filename)
+        @file_path = FilePath.new(filename, self)
+      end
+
+      def corrected_text_with_indent
+        return unless @file_path
+
+        indent = text_with_indent.indent
+        @file_path.source.gsub(/^( *)(?=\S)/, "#{indent}\\1")
+      end
+
+      private
+
+      def text_with_indent
+        @lines.map(&:str).join
       end
     end
   end

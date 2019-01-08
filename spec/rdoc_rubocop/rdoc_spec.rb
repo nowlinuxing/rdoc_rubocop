@@ -66,4 +66,52 @@ RSpec.describe RDocRuboCop::RDoc do
       end
     end
   end
+
+  describe "#apply" do
+    let(:rdoc) do
+      described_class.new(<<-RUBY.strip_heredoc)
+        comment
+
+          Foo.bar(1 , 2) do |a , b|
+            [a , b]
+          end
+
+        comment2
+
+          Foo.bar(1 , 2 , 3 , 4)
+
+      RUBY
+    end
+
+    before do
+      filename = "path/to/dir/sample.rb"
+
+      rdoc.ruby_snippets[0].build_file_path(filename).source = <<-RUBY.strip_heredoc
+        Foo.bar(1, 2) do |a, b|
+          [a, b]
+        end
+      RUBY
+
+      rdoc.ruby_snippets[1].build_file_path(filename).source = <<-RUBY.strip_heredoc
+        Foo.bar(1, 2, 3, 4)
+      RUBY
+    end
+
+    subject { rdoc.apply }
+
+    it "should return corrected text" do
+      expect(subject).to eq(<<-RUBY.strip_heredoc)
+        comment
+
+          Foo.bar(1, 2) do |a, b|
+            [a, b]
+          end
+
+        comment2
+
+          Foo.bar(1, 2, 3, 4)
+
+      RUBY
+    end
+  end
 end
