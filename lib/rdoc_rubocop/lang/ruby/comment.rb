@@ -1,12 +1,16 @@
+require "rdoc_rubocop/rdoc"
+require "rdoc_rubocop/indent_util"
+
 require "rdoc_rubocop/lang/ruby/comment_token_organizable"
 require "rdoc_rubocop/lang/ruby/source_code"
+
+using RDocRuboCop::IndentUtil
 
 module RDocRuboCop
   module Lang
     module Ruby
       class Comment
-        include CommentTokenOrganizable
-
+        attr_reader :comment_tokens
         attr_reader :source_file
 
         def initialize(comment_tokens, source_file = nil)
@@ -18,34 +22,44 @@ module RDocRuboCop
           @source_codes ||= extract_source_codes
         end
 
+        def corrected_text
+          rdoc.
+            apply.
+            gsub(/^/, indent_and_commentchar).
+            gsub(/ *$/, "")
+        end
+
+        def lineno
+          @lineno ||= @comment_tokens.map(&:lineno).minmax
+        end
+
+        def number_of_lines
+          lineno[1] - lineno[0] + 1
+        end
+
         private
 
         def extract_source_codes
-          code_chunk = []
-          codes = []
-          @comment_tokens.each do |comment_token|
-            if comment_token.comment_indent > comment_indent
-              code_chunk << comment_token
-            elsif comment_token.blank? && code_chunk.any?
-              code_chunk << comment_token
-            elsif code_chunk.any?
-              codes << SourceCode.new(trim(code_chunk))
-              code_chunk = []
-            end
-          end
-          codes << SourceCode.new(trim(code_chunk), self) if code_chunk.any?
-
-          codes
+          rdoc.ruby_snippets
         end
 
-        def trim(code_chunk)
-          i = code_chunk.size - 1
-          while i >= 0 && code_chunk[i].blank? do
-            code_chunk.delete_at(i)
-            i -= 1
-          end
+        def rdoc
+          @rdoc ||=
+            begin
+              text_without_commentchar = text.gsub(/^ *#/, "").strip_indent
+              RDoc.new(text_without_commentchar)
+            end
+        end
 
-          code_chunk
+        def indent_and_commentchar
+          indent = " " * @comment_tokens.map(&:column).min
+          commentchar_and_indent = text.scan(/^# *(?=\S)/).min
+
+          "#{indent}#{commentchar_and_indent}"
+        end
+
+        def text
+          @text ||= @comment_tokens.map(&:token).join
         end
       end
     end
