@@ -1,9 +1,6 @@
 require "rdoc_rubocop/rdoc"
 require "rdoc_rubocop/indent_util"
 
-require "rdoc_rubocop/lang/ruby/comment_token_organizable"
-require "rdoc_rubocop/lang/ruby/source_code"
-
 using RDocRuboCop::IndentUtil
 
 module RDocRuboCop
