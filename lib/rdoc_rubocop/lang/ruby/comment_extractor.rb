@@ -31,7 +31,7 @@ module RDocRuboCop
                 chunk << token
               else
                 comments << Comment.new(chunk, @source_file) if chunk.any?
-                chunk = [token]
+                chunk = []
               end
             else
               if chunk.any?

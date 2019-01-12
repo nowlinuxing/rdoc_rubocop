@@ -50,5 +50,17 @@ RSpec.describe RDocRuboCop::Lang::Ruby::Corrector do
 
       it { expect(subject).to eq(source) }
     end
+
+    context "when two comments are adjacent and the indent is different" do
+      let(:source) do
+        <<-RUBY
+          def foo #:nodoc:
+            # comment
+          end
+        RUBY
+      end
+
+      it { expect(subject).to eq(source) }
+    end
   end
 end
