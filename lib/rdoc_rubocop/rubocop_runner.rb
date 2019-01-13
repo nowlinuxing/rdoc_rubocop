@@ -1,4 +1,4 @@
-require "rdoc_rubocop/source_file"
+require "rdoc_rubocop/lang/base/source_file"
 
 module RDocRuboCop
   class RuboCopRunner
@@ -53,7 +53,7 @@ module RDocRuboCop
     end
 
     def source_files
-      @paths.map(&SourceFile.method(:build))
+      @paths.map(&Lang::Base::SourceFile.method(:build))
     end
 
     # Report with a message: "Inspecting 0 files"

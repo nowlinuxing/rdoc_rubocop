@@ -4,7 +4,7 @@ require "rdoc_rubocop/lang/ruby/corrector"
 module RDocRuboCop
   module Lang
     module Ruby
-      class SourceFile < ::RDocRuboCop::SourceFile
+      class SourceFile < Lang::Base::SourceFile
         def comment_extractor_class
           CommentExtractor
         end
