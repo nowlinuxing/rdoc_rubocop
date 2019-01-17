@@ -1,4 +1,4 @@
-require "rdoc_rubocop/rdoc"
+require "rdoc_rubocop/lang/base/comment"
 require "rdoc_rubocop/indent_util"
 
 using RDocRuboCop::IndentUtil
@@ -6,17 +6,13 @@ using RDocRuboCop::IndentUtil
 module RDocRuboCop
   module Lang
     module Ruby
-      class Comment
+      class Comment < Lang::Base::Comment
         attr_reader :comment_tokens
         attr_reader :source_file
 
         def initialize(comment_tokens, source_file = nil)
           @comment_tokens = comment_tokens
           @source_file = source_file
-        end
-
-        def source_codes
-          @source_codes ||= extract_source_codes
         end
 
         def corrected_text
@@ -36,16 +32,8 @@ module RDocRuboCop
 
         private
 
-        def extract_source_codes
-          rdoc.ruby_snippets
-        end
-
-        def rdoc
-          @rdoc ||=
-            begin
-              text_without_commentchar = text.gsub(/^ *#/, "").strip_indent
-              RDoc.new(text_without_commentchar)
-            end
+        def text_without_commentchar
+          text.gsub(/^ *#/, "").strip_indent
         end
 
         def indent_and_commentchar
