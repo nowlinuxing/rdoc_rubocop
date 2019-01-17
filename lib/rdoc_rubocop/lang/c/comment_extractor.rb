@@ -22,7 +22,7 @@ module RDocRuboCop
           comments = []
 
           while match_data = %r(/\*.*?\*/)m.match(@source_file.source, pos) do
-            comments << Comment.new(match_data[0], self, match_data.begin(0), match_data.end(0))
+            comments << Comment.build(match_data[0], self, match_data.begin(0), match_data.end(0))
             pos = match_data.end(0)
           end
 

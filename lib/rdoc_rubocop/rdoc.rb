@@ -3,6 +3,7 @@ require "rdoc_rubocop/rdoc/ruby_snippet"
 
 module RDocRuboCop
   class RDoc
+    attr_reader :text
     attr_reader :ruby_snippets
 
     def initialize(text)

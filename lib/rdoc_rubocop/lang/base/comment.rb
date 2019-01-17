@@ -9,6 +9,10 @@ module RDocRuboCop
         #   @source_file = source_file
         # end
 
+        def rdoc
+          @rdoc ||= RDoc.new(text_without_commentchar)
+        end
+
         def source_codes
           @source_codes ||= extract_source_codes
         end
@@ -21,10 +25,6 @@ module RDocRuboCop
 
         def extract_source_codes
           rdoc.ruby_snippets
-        end
-
-        def rdoc
-          @rdoc ||= RDoc.new(text_without_commentchar)
         end
 
         # def text_without_commentchar
