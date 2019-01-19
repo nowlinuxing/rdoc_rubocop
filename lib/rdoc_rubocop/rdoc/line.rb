@@ -17,7 +17,7 @@ module RDocRuboCop
       end
 
       def indent
-        @str.indent
+        @str.expand_tab.indent
       end
     end
   end

@@ -39,7 +39,7 @@ module RDocRuboCop
           private
 
           def parse
-            body = @comment_text.dup
+            body = @comment_text.expand_tab
 
             #
             # /*********  <- @padding_begin_str

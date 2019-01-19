@@ -30,7 +30,7 @@ module RDocRuboCop
           private
 
           def parse
-            body = @comment_text.dup
+            body = @comment_text.expand_tab
 
             #
             # /*          <- first_line
