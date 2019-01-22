@@ -65,6 +65,8 @@ Or install it yourself as:
     # Correct the code
     $ rdoc-rubocop -a
 
+If you do not specify any file, rdoc_rubocop finds for files recursively from current directory. The extension of the target file is used to determine programming language. If it is .rb, it is parsed as Ruby, and if it is .c, it is parsed as C.
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.

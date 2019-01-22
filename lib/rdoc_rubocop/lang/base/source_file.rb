@@ -10,6 +10,7 @@ module RDocRuboCop
         def self.build(filename)
           klass =
             case filename
+            when /\.c\z/ then Lang::C::SourceFile
             when /\.rb\z/ then Lang::Ruby::SourceFile
             end
 

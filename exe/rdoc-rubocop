@@ -13,7 +13,7 @@ paths =
   flat_map do |path|
     path = Pathname.new(path)
     if path.directory?
-      path.glob("**/*.rb")
+      path.glob(["**/*.c", "**/*.rb"]).sort
     else
       path
     end
