@@ -3,10 +3,10 @@ require "spec_helper"
 RSpec.describe RDocRuboCop::RuboCopModifier do
   describe "#run" do
     let(:file_path) do
-      source_code = RDocRuboCop::Lang::Ruby::SourceCode.new(
-        [RDocRuboCop::Lang::Ruby::Token::CommentToken.new([1, 1], :on_comment, "#   [1 , 2]\n", Ripper::EXPR_BEG)],
-      )
-      RDocRuboCop::FilePath.new("sample.rb", source_code)
+      ruby_snippet = RDocRuboCop::RDoc::RubySnippet.new
+      ruby_snippet.append(RDocRuboCop::RDoc::Line.new(1, "  [1 , 2]\n"))
+
+      RDocRuboCop::FilePath.new("sample.rb", ruby_snippet)
     end
     let(:output) { StringIO.new }
 

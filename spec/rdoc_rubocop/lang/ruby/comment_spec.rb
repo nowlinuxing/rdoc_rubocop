@@ -39,10 +39,13 @@ RSpec.describe RDocRuboCop::Lang::Ruby::Comment do
         COMMENT
       end
 
-      it "should return an array contains one instance of SourceCode" do
+      it "should return an array contains one instance of RubySnippet" do
         expect(subject.size).to eq(1)
-        expect(subject[0]).to be_an_instance_of(RDocRuboCop::Lang::Ruby::SourceCode)
-        expect(subject[0].comment_tokens.size).to eq(2)
+        expect(subject[0]).to be_an_instance_of(RDocRuboCop::RDoc::RubySnippet)
+        expect(subject[0].text).to eq(<<-RUBY.strip_indent)
+          code1
+          code2
+        RUBY
       end
     end
 
@@ -60,10 +63,10 @@ RSpec.describe RDocRuboCop::Lang::Ruby::Comment do
         COMMENT
       end
 
-      it "should return an array contains two instance of SourceCode" do
+      it "should return an array contains two instance of RubySnippet" do
         expect(subject.size).to eq(2)
-        expect(subject[0].comment_tokens.size).to eq(1)
-        expect(subject[1].comment_tokens.size).to eq(1)
+        expect(subject[0].text).to eq("code1\n")
+        expect(subject[1].text).to eq("code2\n")
       end
     end
 
@@ -79,9 +82,12 @@ RSpec.describe RDocRuboCop::Lang::Ruby::Comment do
         COMMENT
       end
 
-      it "should return an array contains one instance of SourceCode whose tailing blank lines is removed" do
+      it "should return an array contains one instance of RubySnippet whose tailing blank lines is removed" do
         expect(subject.size).to eq(1)
-        expect(subject[0].comment_tokens.size).to eq(2)
+        expect(subject[0].text).to eq(<<-RUBY.strip_indent)
+          code1
+          code2
+        RUBY
       end
     end
   end

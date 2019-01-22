@@ -50,7 +50,7 @@ RSpec.describe RDocRuboCop::Lang::Ruby::CommentExtractor do
       end
     end
 
-    context "when two comments are adjacent" do
+    context "when a comment and a postfix comment are adjacent" do
       let(:source) do
         <<-RUBY.strip_heredoc
           class Foo
@@ -64,8 +64,8 @@ RSpec.describe RDocRuboCop::Lang::Ruby::CommentExtractor do
         RUBY
       end
 
-      it "should returns two instances of Comment" do
-        expect(subject.size).to eq(2)
+      it "should ignore a postfix comment" do
+        expect(subject.size).to eq(1)
 
         expect(subject[0].comment_tokens.size).to eq(2)
         expect(subject[0].comment_tokens[0]).to be_an_instance_of(RDocRuboCop::Lang::Ruby::Token::CommentToken)
@@ -74,11 +74,29 @@ RSpec.describe RDocRuboCop::Lang::Ruby::CommentExtractor do
         expect(subject[0].comment_tokens[1]).to be_an_instance_of(RDocRuboCop::Lang::Ruby::Token::CommentToken)
         expect(subject[0].comment_tokens[1].lineno).to eq(3)
         expect(subject[0].comment_tokens[1].token).to eq("# comment\n")
+      end
+    end
 
-        expect(subject[1].comment_tokens.size).to eq(1)
-        expect(subject[1].comment_tokens[0]).to be_an_instance_of(RDocRuboCop::Lang::Ruby::Token::CommentToken)
-        expect(subject[1].comment_tokens[0].lineno).to eq(4)
-        expect(subject[1].comment_tokens[0].token).to eq("# :nodoc:\n")
+    context "when a postfix comment and a comment are adjacent" do
+      let(:source) do
+        <<-RUBY.strip_heredoc
+          class Foo
+            def foo # :nodoc:
+              # comment
+              "foo"
+            end
+            module_function :foo
+          end
+        RUBY
+      end
+
+      it "should ignore a postfix comment" do
+        expect(subject.size).to eq(1)
+
+        expect(subject[0].comment_tokens.size).to eq(1)
+        expect(subject[0].comment_tokens[0]).to be_an_instance_of(RDocRuboCop::Lang::Ruby::Token::CommentToken)
+        expect(subject[0].comment_tokens[0].lineno).to eq(3)
+        expect(subject[0].comment_tokens[0].token).to eq("# comment\n")
       end
     end
   end

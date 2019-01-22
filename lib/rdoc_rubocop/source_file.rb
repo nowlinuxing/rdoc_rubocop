@@ -1,5 +1,4 @@
 require "digest"
-require "rdoc_rubocop/file_path"
 
 module RDocRuboCop
   class SourceFile
@@ -29,13 +28,16 @@ module RDocRuboCop
       @source_code_file_paths ||=
         comments.
           flat_map(&:source_codes).
-          map { |source_code| FilePath.new(@filename, source_code) }
+          map { |source_code| source_code.build_file_path(@filename) }
     end
 
     def comments
-      comment_extractor = comment_extractor_class.new(self)
-      comment_extractor.extract
-      comment_extractor.comments
+      @comments ||=
+        begin
+          comment_extractor = comment_extractor_class.new(self)
+          comment_extractor.extract
+          comment_extractor.comments
+        end
     end
 
     # def comment_extractor_class
@@ -49,10 +51,10 @@ module RDocRuboCop
     end
 
     def correct
-      corrector = corrector_class.new(@source, @source_code_file_paths)
+      corrector = corrector_class.new(self)
       corrector.correct
 
-      @source = corrector.source
+      @source = corrector.corrected_source
     end
 
     # def corrector_class
