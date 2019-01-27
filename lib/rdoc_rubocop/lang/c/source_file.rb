@@ -1,16 +1,16 @@
-require "rdoc_rubocop/lang/ruby/comment_extractor"
-require "rdoc_rubocop/lang/ruby/corrector"
+require "rdoc_rubocop/lang/c/comment_extractor"
+require "rdoc_rubocop/lang/c/corrector"
 
 module RDocRuboCop
   module Lang
-    module Ruby
+    module C
       class SourceFile < Lang::Base::SourceFile
         def comment_extractor_class
-          CommentExtractor
+          C::CommentExtractor
         end
 
         def corrector_class
-          Corrector
+          C::Corrector
         end
       end
     end
